@@ -9,7 +9,7 @@ sbin/mc-inventory
 sbin/mc-ping
 sbin/mc-rpc
 sbin/mcollectived
-share/doc/mcollective-client/COPYING
-@dirrm share/doc/mcollective-client
+%%DOCSDIR%%/COPYING
+@dirrm %%DOCSDIR%%
 @dirrm etc/mcollective/ssl
 @dirrm etc/mcollective
