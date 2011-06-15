@@ -1,1 +1,22 @@
 This is where I will store any ports I make until I have them submitted to official freebsd ports
+
+
+Included here are the portstrees for:
+mcollective-common
+mcollective-client
+mcollective-server
+
+
+=======================================================================================================================
+mcollective-common 1.2.0
+This is required to run mcollective-client and mcollective-server
+
+mcollective-client 1.2.0
+requires mcollective-common
+    version = 1.2.0
+
+mcollective-server 1.2.0
+require mcollective-common
+    version = 1.2.0
+
+
