@@ -6,7 +6,12 @@
 
 name="mcollectived"
 rcvar=`set_rcvar`
-command="%%PREFIX%%/sbin/mcollectived"
+
+load_rc_config $name
+
+: ${mcollectived_enable="NO"}
+
+command="/usr/local/sbin/mcollectived"
 status_cmd="status_mcollectived"
 stop_cmd="stop_mcollectived"
 
@@ -28,7 +33,5 @@ status_mcollectived() {
   fi
 }
 
-load_rc_config $name
 
 run_rc_command "$1"
-
