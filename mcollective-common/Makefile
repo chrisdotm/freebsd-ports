@@ -15,6 +15,7 @@ STRIP=
 
 CONFIG_PATH=	/etc/mcollective/client.cfg
 LIBDIR_PATH=	/usr/libexec/mcollective
+DATADIR=	${PREFIX}/share/mcollective
 
 do-patch:
 	${SED} -i '' -e 's:${CONFIG_PATH}:${PREFIX}${CONFIG_PATH}:' ${WRKSRC}/mcollectived.rb
