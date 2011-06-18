@@ -15,6 +15,7 @@ STRIP=
 
 CONFIG_PATH=	/etc/mcollective/server.cfg
 LIBDIR_PATH=	/usr/libexec/mcollective
+DATADIR=	${PREFIX}/share/mcollective
 
 post-extract:
 	${CP} ${FILESDIR}/mcollectived.rc ${WRKDIR}
