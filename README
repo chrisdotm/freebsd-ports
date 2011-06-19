@@ -20,3 +20,17 @@ require mcollective-common
     version = 1.2.0
 
 
+TESTED WITH THE FOLLOWING RUBY GEMS
+host# gem list
+
+*** LOCAL GEMS ***
+
+amq-client (0.7.0.alpha34)
+amq-protocol (0.7.0.alpha7)
+amqp (0.8.0.rc13)
+eventmachine (0.12.10)
+ruby-augeas (0.3.0)
+sources (0.0.2)
+stomp (1.1.9, 1.1.8)
+
+
