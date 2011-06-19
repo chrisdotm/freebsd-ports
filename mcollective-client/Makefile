@@ -15,6 +15,8 @@ STRIP=
 
 CONFIG_PATH=	/etc/mcollective/client.cfg
 LIBDIR_PATH=	/usr/libexec/mcollective
+RUN_DEPENDS=	mcollective-common>=1.2.0:${PORTSDIR}/sysutils/mcollective-common
+
 
 do-patch:
 	${SED} -i '' -e 's:${LIBDIR_PATH}:${PREFIX}/share:' ${WRKSRC}/etc/client.cfg.dist
@@ -32,8 +34,9 @@ do-install:
 	${INSTALL_PROGRAM} ${WRKSRC}/mc-ping ${PREFIX}/sbin/mc-ping
 	${INSTALL_PROGRAM} ${WRKSRC}/mc-rpc ${PREFIX}/sbin/mc-rpc
 	${INSTALL_PROGRAM} ${WRKSRC}/mcollectived.rb ${PREFIX}/sbin/mcollectived
-	${INSTALL_DATA} ${WRKSRC}/etc/server.cfg.dist ${PREFIX}/etc/mcollective/client.cfg.dist
+	${INSTALL_DATA} ${WRKSRC}/etc/client.cfg.dist ${PREFIX}/etc/mcollective/client.cfg.dist
 	${INSTALL_DATA} ${WRKSRC}/etc/rpc-help.erb ${PREFIX}/etc/mcollective/rpc-help.erb
+	${INSTALL_DATA} ${WRKSRC}/etc/facts.yaml.dist ${PREFIX}/etc/mcollective/facts.yaml.dist
 	${INSTALL_DATA} ${WRKSRC}/COPYING ${DOCSDIR}/COPYING
 
 .include <bsd.port.mk>

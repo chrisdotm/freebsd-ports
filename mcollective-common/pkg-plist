@@ -1,3 +1,5 @@
+etc/mcollective/
+etc/mcollective/ssl
 %%RUBY_SITELIBDIR%%/mcollective.rb
 %%RUBY_SITELIBDIR%%/mcollective/agents.rb
 %%RUBY_SITELIBDIR%%/mcollective/application.rb
@@ -222,8 +224,6 @@
 @dirrm %%DATADIR%%/application
 @dirrm %%DATADIR%%/agent
 @dirrm %%DATADIR%%
-@dirrm %%EXAMPLESDIR%%
-@dirrm %%DOCSDIR%%
 @dirrm %%RUBY_SITELIBDIR%%/mcollective/vendor/systemu/samples
 @dirrm %%RUBY_SITELIBDIR%%/mcollective/vendor/systemu/lib
 @dirrm %%RUBY_SITELIBDIR%%/mcollective/vendor/systemu
@@ -260,5 +260,5 @@
 @dirrm %%RUBY_SITELIBDIR%%/mcollective/facts
 @dirrm %%RUBY_SITELIBDIR%%/mcollective/connector
 @dirrm %%RUBY_SITELIBDIR%%/mcollective
-@dirrm etc/mcollective/ssl
-@dirrm etc/mcollective
+@dirrmtry etc/mcollective/ssl
+@dirrmtry etc/mcollective

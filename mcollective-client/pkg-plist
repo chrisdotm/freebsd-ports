@@ -1,5 +1,6 @@
 bin/mco
 etc/mcollective/client.cfg.dist
+etc/mcollective/facts.yaml.dist
 etc/mcollective/rpc-help.erb
 sbin/mc-call-agent
 sbin/mc-controller
@@ -11,5 +12,3 @@ sbin/mc-rpc
 sbin/mcollectived
 %%DOCSDIR%%/COPYING
 @dirrm %%DOCSDIR%%
-@dirrm etc/mcollective/ssl
-@dirrm etc/mcollective
