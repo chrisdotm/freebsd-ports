@@ -33,7 +33,6 @@ do-install:
 	${INSTALL_PROGRAM} ${WRKSRC}/mc-inventory ${PREFIX}/sbin/mc-inventory
 	${INSTALL_PROGRAM} ${WRKSRC}/mc-ping ${PREFIX}/sbin/mc-ping
 	${INSTALL_PROGRAM} ${WRKSRC}/mc-rpc ${PREFIX}/sbin/mc-rpc
-	${INSTALL_PROGRAM} ${WRKSRC}/mcollectived.rb ${PREFIX}/sbin/mcollectived
 	${INSTALL_DATA} ${WRKSRC}/etc/client.cfg.dist ${PREFIX}/etc/mcollective/client.cfg.dist
 	${INSTALL_DATA} ${WRKSRC}/etc/rpc-help.erb ${PREFIX}/etc/mcollective/rpc-help.erb
 	${INSTALL_DATA} ${WRKSRC}/etc/facts.yaml.dist ${PREFIX}/etc/mcollective/facts.yaml.dist
