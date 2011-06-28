@@ -1,1 +1,0 @@
-@unexec rmdir %D 2> /dev/null || true
