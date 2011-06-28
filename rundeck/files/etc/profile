@@ -1,10 +1,10 @@
-RDECK_HOME=/tmp/rdeck
+RDECK_HOME=INSTALL_DIR
 export RDECK_HOME
 
-RDECK_BASE=/tmp/rdeck
+RDECK_BASE=INSTALL_DIR
 export RDECK_BASE
 
-JAVA_HOME=/usr/local/diablo-jdk1.6.0/jre
+JAVA_HOME=JAVAHOME/jre
 export JAVA_HOME
 
 PATH=$JAVA_HOME/bin:$RDECK_HOME/tools/bin:$PATH
