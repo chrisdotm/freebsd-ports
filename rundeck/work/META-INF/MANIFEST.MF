@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.8.1
+Created-By: 1.6.0_21-b06 (Sun Microsystems Inc.)
+Main-Class: com.dtolabs.rundeck.ExpandRunServer
+Rundeck-Version: 1.2.1
+Rundeck-Start-Class: com.dtolabs.rundeck.RunServer
+Rundeck-Jetty-Libs: servlet-api-2.5-20081211.jar jetty-6.1.21.jar jett
+ y-util-6.1.21.jar jetty-naming-6.1.21.jar jetty-plus-6.1.21.jar
+Rundeck-Jetty-Lib-Path: pkgs/webapp/WEB-INF/lib
+

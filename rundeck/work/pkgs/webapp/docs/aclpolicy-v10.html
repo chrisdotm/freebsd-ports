@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>ACLPOLICY(5) RunDeck User Manuals | Version 1.2</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Noah Campbell" />
+  <meta name="date" content="March 11, 2011" />
+  <link rel="stylesheet" href="RunDeck-Guide.css" type="text/css" />
+</head>
+<body>
+<div id="docbody">
+<h1 class="title">ACLPOLICY(5) RunDeck User Manuals | Version 1.2</h1>
+<div id="overview"
+><h1
+  >Overview</h1
+  ><p
+  >Instead of using a strict xml schema, a markup language is used so new tags can be introduced in subsequent releases while preserving backwards compatibility.</p
+  ><p
+  >Another benefit is that multiple aclpolicy files can be stored in the same directory, helping the management of each set of rules. This reduces the complexity of each file. The default path is</p
+  ><ul
+  ><li
+    >RPM install: <code
+      >/etc/rundeck</code
+      ></li
+    ><li
+    >Launcher install: <code
+      >$RDECK_BASE/etc</code
+      ></li
+    ></ul
+  ><p
+  >Policy files are parsed using YAML and while the structure is ridgid, additional information can be added and safely ignored. So creating arbitrary elements for documentation or organizational purposes is gracefully parsed.<br
+     />The resulting file must be a valid yaml file.</p
+  ><p
+  >In addition, existing XML formats are still supported to provide a transition.<br
+     />A warning is given only once for each file that is detected to be xml in the log file.</p
+  ><div id="the-aclpolicy-markup-by-example"
+  ><h2
+    >The aclpolicy markup by example</h2
+    ><p
+    >An example policy document.</p
+    ><pre
+    ><code
+      >description: Yaml Policy 1
+rules:
+  ^$:
+    actions: 'foobar'
+
+  /yml:
+    actions: 'exact_match'
+
+  /yml.*: 
+    actions: pattern_match
+
+  /listAction/.*:
+    actions: [action_list_1,action_list_2]
+
+by:
+    username: 'yml_usr_1'
+    group: 'yml_group_1'
+</code
+      ></pre
+    ><p
+    >An .aclpolicy supports multiple policy definitions in the form of YAML documents usign the <code
+      >---</code
+      > separator. There are three elements that make a policy definition: <code
+      >decription</code
+      >, <code
+      >rules</code
+      >, <code
+      >by</code
+      >.</p
+    ><p
+    >It's recommended that this description be short and descriptive as it appears in the log output.</p
+    ></div
+  ><div id="by-element"
+  ><h2
+    ><code
+      >by</code
+      > Element</h2
+    ><p
+    >Within a <code
+      >by</code
+      > can be any number of <code
+      >username</code
+      > and <code
+      >group</code
+      > elements. A single match will result in further evaluation of the policy.<br
+       /><code
+      >username</code
+      > elements are evaluated first as they are typically more restrictive.<br
+       /><code
+      >group</code
+      > elements are evaluated second. Ordering is not important within this element.</p
+    ></div
+  ><div id="rules-element"
+  ><h2
+    ><code
+      >rules</code
+      > Element</h2
+    ><p
+    >The <code
+      >rules</code
+      > element contains a map of resource paths to <code
+      >actions</code
+      >. The key in each rule, for example:</p
+    ><pre
+    ><code
+      >/path:
+   actions: 'an_action'
+</code
+      ></pre
+    ><p
+    ><code
+      >/path</code
+      > is evaluated against the resource being evaluated. See below for a complete list of paths that can have ACLs applied. The path is evaluated as a java regex expression. If a match is successful, then a final check against <code
+      >actions</code
+      > element is performed.</p
+    ></div
+  ><div id="actions-element"
+  ><h2
+    ><code
+      >actions</code
+      > element</h2
+    ><p
+    >The actions element can be either a single value, or a list of values. A single value takes the form:</p
+    ><pre
+    ><code
+      >actions: 'an_action'
+</code
+      ></pre
+    ><p
+    >And a list takes the form:</p
+    ><pre
+    ><code
+      >actions: ['an_action1','an_action2']
+</code
+      ></pre
+    ><p
+    >Note that the single tick marks are optional according to the yaml specification.</p
+    ><p
+    >Known path/actions combinations are:</p
+    ><table
+    ><col width="12%"
+       /><col width="22%"
+       /><col width="57%"
+       /><thead
+      ><tr class="header"
+	><th align="left"
+	  >Group</th
+	  ><th align="left"
+	  >Job</th
+	  ><th align="left"
+	  >Actions</th
+	  ></tr
+	></thead
+      ><tbody
+      ><tr class="odd"
+	><td align="left"
+	  >adhoc</td
+	  ><td align="left"
+	  >Temporary_Job</td
+	  ><td align="left"
+	  >workflow_read</td
+	  ></tr
+	><tr class="even"
+	><td align="left"
+	  >adhoc</td
+	  ><td align="left"
+	  >adhoc</td
+	  ><td align="left"
+	  >workflow_read, workflow_kill, workflow_read</td
+	  ></tr
+	><tr class="odd"
+	><td align="left"
+	  >ui</td
+	  ><td align="left"
+	  >adhoc_run</td
+	  ><td align="left"
+	  >workflow_run</td
+	  ></tr
+	><tr class="even"
+	><td align="left"
+	  >ui</td
+	  ><td align="left"
+	  >create</td
+	  ><td align="left"
+	  >workflow_create, workflow_run</td
+	  ></tr
+	><tr class="odd"
+	><td align="left"
+	  >ui</td
+	  ><td align="left"
+	  >run_and_forget</td
+	  ><td align="left"
+	  >workflow_run</td
+	  ></tr
+	><tr class="even"
+	><td align="left"
+	  >*</td
+	  ><td align="left"
+	  >*</td
+	  ><td align="left"
+	  >workflow_read, workflow_create, workflow_update, workflow_delete, workflow_kill, workflow_run, events_read, events_create, events_update, events_delete, resources_read, resources_create, resources_update, resources_delete</td
+	  ></tr
+	></tbody
+      ></table
+    ><p
+    >Possible values are limitless so it requires an understanding of the job definition you're trying to run. The best way to understand what the actions are is to look at the rundeck-audit.log. This will show all the options as they're being evaluated.</p
+    ><p
+    >The RunDeck source code and all documentation may be downloaded from <a href="https://github.com/dtolabs/rundeck/"
+      ><code
+	>https://github.com/dtolabs/rundeck/</code
+	></a
+      >.</p
+    ></div
+  ></div
+>
+</div>
+</body>
+</html>

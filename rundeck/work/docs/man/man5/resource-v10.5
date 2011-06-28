@@ -1,0 +1,241 @@
+.TH PROJECT-V10 5 "November 20, 2010" "RunDeck User Manuals" "Version 1.0"
+.SH NAME
+.PP
+project-v10 - describes the RunDeck resource model document
+.PP
+The \f[B]project\f[] XML document declares a resource model that
+can also be uploaded to a project hosted on the RunDeck server.
+This is a demonstration document using all possible elements.
+.SH Elements
+.SS project
+.PP
+The root (aka \[lq]top-level\[rq]) element of the project.xml file.
+Can contain the following elements:
+.TP
+.B node (#node)
+A node resource element.
+.RS
+.RE
+.TP
+.B setting (#setting)
+A setting resource element.
+.RS
+.RE
+.PP
+\f[I]Example\f[]
+.PP
+\f[CR]
+      <project>
+      \ \ <node\ .../>
+      \ \ <setting\ ...\ \ />
+      </project>
+\f[]
+.SS node
+.PP
+The node element defines a Node resource.
+.PP
+\f[I]Attributes\f[]
+.TP
+.B name
+The node name.
+This is a logical identifier from the node.
+(required)
+.RS
+.RE
+.TP
+.B type
+The node type, such as \[lq]Node\[rq].
+(required)
+.RS
+.RE
+.TP
+.B description
+A brief description about the node.
+(optional)
+.RS
+.RE
+.TP
+.B hostname
+The hostname or IP address of the remote host.
+(required)
+.RS
+.RE
+.TP
+.B osArch
+The operating system architecture.
+(optional)
+.RS
+.RE
+.TP
+.B osFamily
+The operating system family, such as unix or windows.
+(optional)
+.RS
+.RE
+.TP
+.B osName
+The operating system name such as Linux or Mac OS X.
+(optional)
+.RS
+.RE
+.TP
+.B tags
+Comma separated list of filtering tags.
+(optional)
+.RS
+.RE
+.TP
+.B username
+The username used for the remote connection.
+(required)
+.RS
+.RE
+.TP
+.B editUrl
+URL to an external resource model editor service (optional)
+.RS
+.RE
+.TP
+.B remoteUrl
+URL to an external resource model service.
+(optional)
+.RS
+.RE
+.PP
+\f[I]Nested Elements\f[]
+.TP
+.B resources (#resources)
+Associated resources.
+.RS
+.RE
+.PP
+\f[I]Examples\f[]
+.PP
+Define a node named \[lq]strongbad\[rq]:
+.PP
+\f[CR]
+      <node\ name="strongbad"\ type="Node"
+      \ \ \ \ description="a\ development\ host"
+      \ \ \ \ hostname="strongbad.local"
+      \ \ \ \ osArch="i386"\ osFamily="unix"\ osName="Darwin"\ osVersion="9.2.2"
+      \ \ \ \ username="alexh"/>
+\f[]
+.PP
+Define a node of the type LinuxNode that has a Port as a resource:
+.PP
+\f[CR]
+      <node\ type="LinuxNode"\ name="centos54"\ hostname="centos54.local"
+      \ \ \ \ \ \ description="Sample\ Linux\ node"\ tags="sample,linux"\ \ \ \ \ 
+      \ \ \ \ \ \ >
+      \ \ \ \ <resources>
+      \ \ \ \ \ \ <resource\ type="Port"\ name="httpd"/>
+      \ \ \ \ </resources>
+      </node>
+\f[]
+.PP
+Define a node named that uses a non standard SSH port.
+The \[lq]hostname\[rq] value is overloaded to include the port
+(192.168.1.106:4022):
+.PP
+\f[CR]
+      <node\ name="centos54"\ type="Node"
+      \ \ \ \ description="a\ centos\ host"
+      \ \ \ \ hostname="192.168.1.106:4022"
+      \ \ \ \ username="deploy"/>
+\f[]
+.PP
+An example using just the required attributes:
+.PP
+\f[CR]
+      <node\ name="centos54"\ type="Node"
+      \ \ \ \ hostname="192.168.1.106:4022"
+      \ \ \ \ username="deploy"/>
+\f[]
+.SS setting
+.PP
+The setting element defines a Setting resource.
+.PP
+\f[I]Attributes\f[]
+.TP
+.B type
+the resource type.
+.RS
+.RE
+.TP
+.B name
+the setting name (required).
+.RS
+.RE
+.TP
+.B description
+brief description.
+.RS
+.RE
+.TP
+.B settingType
+the value type.
+.RS
+.RE
+.TP
+.B settingValue
+the setting value (required).
+.RS
+.RE
+.PP
+\f[I]Example\f[]
+.PP
+\f[CR]
+      <setting\ type="Port"\ name=""tomcatListenPort""\ 
+      \ \ \ \ \ \ \ description="The\ port\ tomcat\ listens"\ 
+      \ \ \ \ \ \ \ settingValue="8080"\ />
+\f[]
+.SS resources
+.PP
+The resources tag defines a set of resource relationships.
+Each related resource is referenced via a resource (#resource)
+element.
+.PP
+\f[I]Nested elements\f[]
+.TP
+.B resource (#resource)
+An associated resource.
+.RS
+.RE
+.PP
+\f[I]Example\f[]
+.PP
+\f[CR]
+      <resources>
+      \ \ \ <resource\ type="Port"\ name="tomcatListenPort"\ />
+      </resources>
+\f[]
+.SS resource
+.PP
+A resource element is used to reference another resource in the
+project model by type and name.
+.PP
+\f[I]Attributes\f[]
+.TP
+.B type
+the resource type.
+.RS
+.RE
+.TP
+.B name
+the resource name.
+.RS
+.RE
+.PP
+\f[I]Example\f[]
+.PP
+Reference a Port setting named \[lq]tomcatListenPort\[rq].
+.PP
+\f[CR]
+      <resource\ type="Port"\ name="tomcatListenPort"\ />
+\f[]
+.PP
+The RunDeck source code and all documentation may be downloaded
+from <https://github.com/dtolabs/rundeck/>.
+.SH AUTHORS
+Alex Honor.
+

@@ -1,0 +1,188 @@
+.\"t
+.TH ACLPOLICY 5 "March 11, 2011" "RunDeck User Manuals" "Version 1.2"
+.SH Overview
+.PP
+Instead of using a strict xml schema, a markup language is used so
+new tags can be introduced in subsequent releases while preserving
+backwards compatibility.
+.PP
+Another benefit is that multiple aclpolicy files can be stored in
+the same directory, helping the management of each set of rules.
+This reduces the complexity of each file.
+The default path is
+.IP \[bu] 2
+RPM install: \f[B]/etc/rundeck\f[]
+.IP \[bu] 2
+Launcher install: \f[B]$RDECK_BASE/etc\f[]
+.PP
+Policy files are parsed using YAML and while the structure is
+ridgid, additional information can be added and safely ignored.
+So creating arbitrary elements for documentation or organizational
+purposes is gracefully parsed.
+.PD 0
+.P
+.PD
+The resulting file must
+be a valid yaml file.
+.PP
+In addition, existing XML formats are still supported to provide a
+transition.
+.PD 0
+.P
+.PD
+A warning is given only once for each file
+that is detected to be xml in the log file.
+.SS The aclpolicy markup by example
+.PP
+An example policy document.
+.PP
+\f[CR]
+      description:\ Yaml\ Policy\ 1
+      rules:
+      \ \ ^$:
+      \ \ \ \ actions:\ \[aq]foobar\[aq]
+      
+      \ \ /yml:
+      \ \ \ \ actions:\ \[aq]exact_match\[aq]
+      
+      \ \ /yml.*:\ 
+      \ \ \ \ actions:\ pattern_match
+      
+      \ \ /listAction/.*:
+      \ \ \ \ actions:\ [action_list_1,action_list_2]
+      
+      by:
+      \ \ \ \ username:\ \[aq]yml_usr_1\[aq]
+      \ \ \ \ group:\ \[aq]yml_group_1\[aq]
+\f[]
+.PP
+An \&.aclpolicy supports multiple policy definitions in the form of
+YAML documents usign the \f[B]---\f[] separator.
+There are three elements that make a policy definition:
+\f[B]decription\f[], \f[B]rules\f[], \f[B]by\f[].
+.PP
+It's recommended that this description be short and descriptive as
+it appears in the log output.
+.SS \f[B]by\f[] Element
+.PP
+Within a \f[B]by\f[] can be any number of \f[B]username\f[] and
+\f[B]group\f[] elements.
+A single match will result in further evaluation of the
+policy.
+.PD 0
+.P
+.PD
+\f[B]username\f[] elements are evaluated first
+as they are typically more restrictive.
+.PD 0
+.P
+.PD
+\f[B]group\f[]
+elements are evaluated second.
+Ordering is not important within this element.
+.SS \f[B]rules\f[] Element
+.PP
+The \f[B]rules\f[] element contains a map of resource paths to
+\f[B]actions\f[].
+The key in each rule, for example:
+.PP
+\f[CR]
+      /path:
+      \ \ \ actions:\ \[aq]an_action\[aq]
+\f[]
+.PP
+\f[B]/path\f[] is evaluated against the resource being evaluated.
+See below for a complete list of paths that can have ACLs applied.
+The path is evaluated as a java regex expression.
+If a match is successful, then a final check against
+\f[B]actions\f[] element is performed.
+.SS \f[B]actions\f[] element
+.PP
+The actions element can be either a single value, or a list of
+values.
+A single value takes the form:
+.PP
+\f[CR]
+      actions:\ \[aq]an_action\[aq]
+\f[]
+.PP
+And a list takes the form:
+.PP
+\f[CR]
+      actions:\ [\[aq]an_action1\[aq],\[aq]an_action2\[aq]]
+\f[]
+.PP
+Note that the single tick marks are optional according to the yaml
+specification.
+.PP
+Known path/actions combinations are:
+.PP
+.TS
+tab(@);
+lw(8.75n) lw(15.75n) lw(40.25n).
+T{
+Group
+T}@T{
+Job
+T}@T{
+Actions
+T}
+_
+T{
+adhoc
+T}@T{
+Temporary_Job
+T}@T{
+workflow_read
+T}
+T{
+adhoc
+T}@T{
+adhoc
+T}@T{
+workflow_read, workflow_kill, workflow_read
+T}
+T{
+ui
+T}@T{
+adhoc_run
+T}@T{
+workflow_run
+T}
+T{
+ui
+T}@T{
+create
+T}@T{
+workflow_create, workflow_run
+T}
+T{
+ui
+T}@T{
+run_and_forget
+T}@T{
+workflow_run
+T}
+T{
+*
+T}@T{
+*
+T}@T{
+workflow_read, workflow_create, workflow_update, workflow_delete,
+workflow_kill, workflow_run, events_read, events_create,
+events_update, events_delete, resources_read, resources_create,
+resources_update, resources_delete
+T}
+.TE
+.PP
+Possible values are limitless so it requires an understanding of
+the job definition you're trying to run.
+The best way to understand what the actions are is to look at the
+rundeck-audit.log.
+This will show all the options as they're being evaluated.
+.PP
+The RunDeck source code and all documentation may be downloaded
+from <https://github.com/dtolabs/rundeck/>.
+.SH AUTHORS
+Noah Campbell.
+

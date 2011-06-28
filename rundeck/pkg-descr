@@ -1,0 +1,11 @@
+RunDeck is cross-platform open source software that helps you automate ad-hoc and routine
+procedures in data center or cloud environments. RunDeck allows you to run tasks on any
+number of nodes from a web-based or command-line interface. RunDeck also includes
+other features that make it easy to scale up your scripting efforts including:
+    access control,
+    workflow building,
+    scheduling,
+    logging,
+    and integration with external sources for node and option data.
+
+WWW: http://www.rundeck.org

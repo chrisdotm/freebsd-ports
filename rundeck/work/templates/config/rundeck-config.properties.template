@@ -1,0 +1,32 @@
+#loglevel.default is the default log level for jobs: ERR,WARN,INFO,VERBOSE,DEBUG
+loglevel.default=INFO
+
+#rss.enabled if set to true enables RSS feeds that are public (non-authenticated)
+rss.enabled=true
+grails.serverURL=http://${server.hostname}:${server.http.port}
+dataSource.dbCreate = update
+dataSource.url = jdbc:hsqldb:file:${server.datastore.path};shutdown=true
+
+#
+#Map rundeck actions to allowed roles
+# mappedRoles.X=A,B,C
+# means allow X to users in role A, B or C
+#
+mappedRoles.admin=admin
+mappedRoles.user_admin=admin
+mappedRoles.workflow_read=user
+mappedRoles.workflow_create=admin
+mappedRoles.workflow_update=admin
+mappedRoles.workflow_delete=admin
+mappedRoles.workflow_kill=user
+mappedRoles.workflow_run=user
+mappedRoles.events_read=user
+mappedRoles.events_create=user
+mappedRoles.events_update=user
+mappedRoles.events_delete=user
+mappedRoles.resources_read=user
+mappedRoles.resources_create=admin
+mappedRoles.resources_update=admin
+mappedRoles.resources_delete=admin
+#special role for viewing jobs unauthorized to run
+mappedRoles.job_view_unauthorized=job_view_unauthorized

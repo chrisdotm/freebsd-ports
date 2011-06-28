@@ -1,0 +1,128 @@
+.TH RESOURCE-YAML-V12 5 "February 25, 2011" "RunDeck User Manuals" "Version 1.2"
+.SH NAME
+.PP
+resource-yaml-v12 - describes the RunDeck resource model document
+Yaml format
+.PP
+The \f[B]resource\f[] YAML document declares a resource model used
+by a RunDeck Project to define the set of Nodes that are available.
+.PP
+See <http://yaml.org> for more information about YAML.
+.SS Structure
+.PP
+The resource format supports two structures: either a Yaml Sequence
+of Node definitions (#node-definition), or a Yaml Map of node names
+with Node definitions (#node-definition) as values.
+.PP
+Example:
+.PP
+\f[CR]
+      -\ somenode:\ ...
+      \ \ ...
+      -\ somenode2:\ ...
+\f[]
+.PP
+OR
+.PP
+\f[CR]
+      somenode:
+      \ \ \ hostname:\ ...
+      \ \ \ ...
+      somenode2:
+      \ \ \ hostname:\ ...
+\f[]
+.PP
+In the second case, the \f[B]nodename\f[] entry is not required.
+.SS Node Definition
+.PP
+A Node definition consists of a Map with some required and some
+optional entries.
+.PP
+Required Entries:
+.TP
+.B \f[B]nodename\f[]
+Name of the node, this must be a unique Identifier across nodes
+within a project
+.RS
+.RE
+.TP
+.B \f[B]hostname\f[]
+Hostname of the node.
+This can be any IP Address or hostname to address the node.
+Since hostname is used to make SSH connections, it is possible to
+overload the value to include port number.
+(eg, hostname:port).
+.RS
+.RE
+.TP
+.B \f[B]username\f[]
+User name to connect to the node via SSH.
+.RS
+.RE
+.PP
+Optional Entries:
+.TP
+.B \f[B]description\f[]
+A description of the Node
+.RS
+.RE
+.TP
+.B \f[B]tags\f[]
+A literal with comma-separated tag strings, or a Sequence of
+literals
+.RS
+.RE
+.TP
+.B \f[B]osFamily\f[]
+OS Family
+.RS
+.RE
+.TP
+.B \f[B]osArch\f[]
+OS Architecture
+.RS
+.RE
+.TP
+.B \f[B]osName\f[]
+OS Name
+.RS
+.RE
+.TP
+.B \f[B]osVersion\f[]
+OS Version
+.RS
+.RE
+.TP
+.B \f[B]editUrl\f[]
+URL to an external resource model service.
+.RS
+.RE
+.TP
+.B \f[B]remoteUrl\f[]
+URL to an external resource model editor service.
+.RS
+.RE
+.IP \[bu] 2
+For more information about using the
+\f[B]editUrl\f[]/\f[B]remoteUrl\f[] see the
+RunDeck Guide (RunDeck-Guide.html#resource-editor).
+.SS Examples
+.PP
+\f[CR]
+      Venkman.local:
+      \ \ description:\ Rundeck\ server\ node
+      \ \ hostname:\ Venkman.local
+      \ \ nodename:\ Venkman.local
+      \ \ osArch:\ x86_64
+      \ \ osFamily:\ unix
+      \ \ osName:\ Mac\ OS\ X
+      \ \ osVersion:\ 10.6.6
+      \ \ tags:\ \[aq]\[aq]
+      \ \ username:\ greg
+\f[]
+.PP
+The RunDeck source code and all documentation may be downloaded
+from <https://github.com/dtolabs/rundeck/>.
+.SH AUTHORS
+Greg Schueler.
+

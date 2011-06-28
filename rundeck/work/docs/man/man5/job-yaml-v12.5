@@ -1,0 +1,565 @@
+.TH JOB-YAML-V12 5 "February 25, 2011" "RunDeck User Manuals" "Version 1.2"
+.SH NAME
+.PP
+job-yaml-v12 - The `job' YAML file declares job entries for
+RunDeck.
+.SS Loading and unloading
+.PP
+This file can be batch loaded via \f[I]rd-jobs\f[] load command:
+.PP
+\f[CR]
+      rd-jobs\ load\ --file\ /path/to/jobs.yaml\ -F\ yaml
+\f[]
+.PP
+RunDeck job definitions can be dumped and saved to a file via
+rd-jobs list command:
+.PP
+\f[CR]
+      rd-jobs\ list\ --file\ /tmp/jobs.yaml\ -F\ yaml
+\f[]
+.SS Structure
+.PP
+The YAML document can contain multiple Job definitions, in a
+sequence:
+.PP
+\f[CR]
+      -\ #\ job\ 1
+      \ \ name:\ ...
+      -\ #\ job\ 2
+      \ \ name:\ ...
+\f[]
+.PP
+Each Job definition is a Map consisting of some required and some
+optional entries, as listed below.
+.SS Job Map Contents
+.PP
+Each Job definition requires these values:
+.TP
+.B \f[B]name\f[]
+the job name
+.RS
+.RE
+.TP
+.B \f[B]description\f[]
+the job description (can be blank)
+.RS
+.RE
+.TP
+.B \f[B]project\f[]
+the Project name
+.RS
+.RE
+.TP
+.B \f[B]loglevel\f[]
+the loglevel to use for the job, the value must be one of:
+.RS
+.IP \[bu] 2
+\f[B]DEBUG\f[]
+.IP \[bu] 2
+\f[B]VERBOSE\f[]
+.IP \[bu] 2
+\f[B]INFO\f[]
+.IP \[bu] 2
+\f[B]WARN\f[]
+.IP \[bu] 2
+\f[B]ERR\f[]
+.RE
+.TP
+.B \f[B]sequence\f[] (#sequence)
+The workflow sequence definition
+.RS
+.RE
+.PP
+A minimal job definition example:
+.PP
+\f[CR]
+      name:\ job\ name
+      description:\ \[aq]\[aq]
+      project:\ project1
+      loglevel:\ INFO
+      sequence:\ 
+      \ \ -\ exec:\ a\ command
+\f[]
+.PP
+In addition, these optional entries can be present:
+.TP
+.B \f[B]group\f[]
+Job group name
+.RS
+.RE
+.TP
+.B \f[B]options\f[] (#options)
+Set of Options for the Job
+.RS
+.RE
+.TP
+.B \f[B]schedule\f[] (#schedule)
+Job schedule
+.RS
+.RE
+.TP
+.B \f[B]nodefilters\f[] (#nodefilters)
+Node filter definition
+.RS
+.RE
+.TP
+.B \f[B]notification\f[] (#notification)
+Job result notifications
+.RS
+.RE
+.SS Sequence
+.PP
+This defines the Workflow options and execution sequence.
+.PP
+Example:
+.PP
+\f[CR]
+      sequence:
+      \ \ keepgoing:\ true
+      \ \ strategy:\ node-first
+      \ \ commands:\ 
+      \ \ -\ exec:\ ...
+      \ \ -\ script:\ ...
+      \ \ \ \ args:\ ...
+      \ \ -\ scriptfile:\ ...
+      \ \ \ \ args:
+      \ \ -\ jobref:
+      \ \ \ \ \ \ name:\ jobname
+      \ \ \ \ \ \ group:\ group
+      \ \ \ \ \ \ args:\ args
+\f[]
+.PP
+The sequence has these required entries:
+.TP
+.B \f[B]keepgoing\f[]
+\[lq]true/false\[rq] - whether the sequence should keep going if an
+error occurs
+.RS
+.RE
+.TP
+.B \f[B]strategy\f[]
+\[lq]node-first\[rq] or \[lq]step-first\[rq].
+Determines the strategy for executing the sequence across a set of
+nodes.
+See the
+RunDeck Guide (RunDeck-Guide.html#workflow-control-settings) for
+more info.
+.RS
+.RE
+.TP
+.B \f[B]commands\f[]
+This is a Sequence of: * One or more Command Definitions (#command)
+.RS
+.RE
+.SS Command
+.PP
+Each command in the Sequence (#sequence) can be of these different
+types:
+.IP \[bu] 2
+Simple command execution entry (#simple-command-entry)
+.IP \[bu] 2
+Script execution entry (#script-execution-entry)
+.IP \[bu] 2
+Script file execution entry (#script-file-execution-entry)
+.IP \[bu] 2
+Job Reference entry (#job-reference-entry)
+.SS Simple Command Entry
+.PP
+This Command (#command) consists of a single entry:
+.TP
+.B \f[B]exec\f[]
+the command to execute
+.RS
+.RE
+.SS Script Execution Entry
+.PP
+This Command (#command) executes the script content specified.
+.TP
+.B \f[B]script\f[]
+The script content.
+It is useful to use the YAML \[lq]literal\[rq] scalar syntax shown
+below
+.RS
+.RE
+.TP
+.B \f[B]args\f[]
+Optional string defining arguments to pass to the script.
+.RS
+.RE
+.PP
+Example:
+.PP
+\f[CR]
+      \ -\ script:\ |-
+      \ \ \ \ #!/bin/bash
+      
+      \ \ \ \ echo\ this\ is\ a\ script
+      \ \ \ \ echo\ this\ is\ option\ value:\ \@option.test\@
+      \ \ args:\ arguments\ passed\ to\ the\ script
+\f[]
+.SS Script File Execution Entry
+.PP
+This Command (#command) executes a script file stored on the
+server.
+.TP
+.B \f[B]scriptfile\f[]
+path to the script file
+.RS
+.RE
+.TP
+.B \f[B]args\f[]
+optional arguments to the script
+.RS
+.RE
+.PP
+Example:
+.PP
+\f[CR]
+      -\ scriptfile:\ /path/to/script
+      \ \ args:\ arguments\ to\ script
+\f[]
+.SS Job Reference Entry
+.PP
+This Command (#command) executes another RunDeck Job.
+.TP
+.B \f[B]jobref\f[]
+map consisting of these entries:
+.RS
+.TP
+.B \f[B]name\f[]
+Name of the Job
+.RS
+.RE
+.TP
+.B \f[B]group\f[]
+Group of the Job (optional)
+.RS
+.RE
+.TP
+.B \f[B]args\f[]
+Arguments to pass to the job when executed
+.RS
+.RE
+.RE
+.PP
+Example:
+.PP
+\f[CR]
+      -\ jobref:
+      \ \ \ \ group:\ test
+      \ \ \ \ name:\ simple\ job\ test
+      \ \ \ \ args:\ args\ for\ the\ job
+\f[]
+.SS Options
+.PP
+Options for a job can be specifed with a map.
+Each map key is the name of the option, and the content is a map
+defining the Option (#option).
+.PP
+\f[CR]
+      options:
+      \ \ optname1:
+      \ \ \ \ [definition..]
+      \ \ optname2:
+      \ \ \ \ [definition..]
+\f[]
+.SS Option
+.PP
+An option definition has no required entries, so it could be empty:
+.PP
+\f[CR]
+      myoption:\ {}
+\f[]
+.PP
+Optional map entries are:
+.TP
+.B \f[B]description\f[]
+description of the option
+.RS
+.RE
+.TP
+.B \f[B]value\f[]
+a default value for the option
+.RS
+.RE
+.TP
+.B \f[B]values\f[]
+A set of possible values for the option.
+This must be a YAML Sequence of strings.
+.RS
+.RE
+.TP
+.B \f[B]required\f[]
+\[lq]true/false\[rq] - whether the option is required or not
+.RS
+.RE
+.TP
+.B \f[B]enforced\f[]
+\[lq]true/false\[rq] - whether the option value must be one of the
+specified possible values
+.RS
+.RE
+.TP
+.B \f[B]regex\f[]
+A regular expression defining what option values are acceptable
+.RS
+.RE
+.TP
+.B \f[B]valuesUrl\f[]
+A URL to an endpoint that will return a JSON-formatted set of
+values for the option.
+.RS
+.RE
+.TP
+.B \f[B]multivalued\f[]
+\[lq]true/false\[rq] - whether the option supports multiple input
+values
+.RS
+.RE
+.TP
+.B \f[B]delimiter\f[]
+A string used to conjoin multiple input values.
+(Required if \f[B]multivalued\f[] is \[lq]true\[rq])
+.RS
+.RE
+.PP
+Example:
+.PP
+\f[CR]
+      test:
+      \ \ required:\ true
+      \ \ description:\ a\ test\ option
+      \ \ value:\ dvalue
+      \ \ regex:\ ^[abcd]value$
+      \ \ values:
+      \ \ -\ avalue
+      \ \ -\ bvalue
+      \ \ -\ cvalue
+      \ \ multivalued:\ true
+      \ \ delimiter:\ \[aq],\[aq]
+\f[]
+.SS valuesUrl JSON
+.PP
+The data returned from the valuesUrl can be formatted as a list of
+values:
+.PP
+\f[CR]
+      ["x\ value","y\ value"]
+\f[]
+.PP
+or as Name-value list:
+.PP
+\f[CR]
+      [
+      \ \ {name:"X\ Label",\ value:"x\ value"},
+      \ \ {name:"Y\ Label",\ value:"y\ value"},
+      \ \ {name:"A\ Label",\ value:"a\ value"}
+      ]\ 
+\f[]
+.IP \[bu] 2
+See the RunDeck Guide (RunDeck-Guide.html#remote-option-values) for
+more info.
+.SS Schedule
+.PP
+Define a schedule for repeated execution of the Job.
+The schedule can be defined as a Crontab formatted string, or as
+individual components.
+The individual components support Crontab syntax.
+.IP \[bu] 2
+\f[B]crontab\f[]: The crontab string,
+e.g.\ \f[B]"0\ 30\ */6\ ?\ Jan\ Mon\ *"\f[]
+.PP
+Or use a structure of explicit components.
+All of these are optional, but likely you want to change them:
+.TP
+.B \f[B]time\f[]
+a map containing:
+.RS
+.TP
+.B \f[B]seconds\f[]
+seconds value (default: \[lq]0\[rq])
+.RS
+.RE
+.TP
+.B \f[B]minute\f[]
+minutes value (default: \[lq]0\[rq])
+.RS
+.RE
+.TP
+.B \f[B]hour\f[]
+hour value (default: \[lq]0\[rq])
+.RS
+.RE
+.RE
+.TP
+.B \f[B]month\f[]
+Month value (default: \[lq]*\[rq])
+.RS
+.RE
+.TP
+.B \f[B]year\f[]
+Year value (default \[lq]*\[rq])
+.RS
+.RE
+.TP
+.B \f[B]dayofmonth\f[]
+day of month value.
+(mutually exclusive with \f[B]weekday\f[])
+.RS
+.RE
+.TP
+.B \f[B]weekday\f[]
+Map containing:
+.RS
+.TP
+.B \f[B]day\f[]
+Weekday value.
+(mutually exclusive with \f[B]dayofmonth\f[]) (default:
+\[lq]*\[rq])
+.RS
+.RE
+.RE
+.PP
+Example using crontab string:
+.PP
+\f[CR]
+      schedule:
+      \ \ crontab:\ \[aq]0\ 30\ */6\ ?\ Jan\ Mon\ *\[aq]
+\f[]
+.PP
+Example using structure:
+.PP
+\f[CR]
+      schedule:
+      \ \ time:
+      \ \ \ \ hour:\ \[aq]05\[aq]
+      \ \ \ \ minute:\ \[aq]01\[aq]
+      \ \ \ \ seconds:\ \[aq]0\[aq]
+      \ \ month:\ APR,MAR,MAY
+      \ \ year:\ \[aq]*\[aq]
+      \ \ weekday:
+      \ \ \ \ day:\ FRI,MON,TUE
+\f[]
+.SS Nodefilters
+.PP
+Specifies the Nodes to use for the job, and the node-dispatch
+options.
+Contains the following entries:
+.TP
+.B \f[B]dispatch\f[]
+a Map containing:
+.RS
+.TP
+.B \f[B]keepgoing\f[]
+\[lq]true/false\[rq] - whether to keepgoing on remaining nodes if a
+node fails
+.RS
+.RE
+.TP
+.B \f[B]excludePrecedence\f[]
+\[lq]true/false\[rq] (default \[lq]true\[rq]) - determines
+precedence for filters
+.RS
+.RE
+.TP
+.B \f[B]threadcount\f[]
+Number of threads to use for parallel dispatch (default
+\[lq]1\[rq])
+.RS
+.RE
+.RE
+.PP
+The \f[B]nodefilters\f[] must also contain ONE of \f[B]include\f[]
+or \f[B]exclude\f[] filter specifiers.
+.TP
+.B \f[B]include\f[]/\f[B]exclude\f[]
+A Map containing filter entries:
+.RS
+.TP
+.B \f[B]hostname\f[]
+Hostname filter
+.RS
+.RE
+.TP
+.B \f[B]name\f[]
+Node name filter
+.RS
+.RE
+.TP
+.B \f[B]tags\f[]
+Tags filter.
+Supports boolean operators AND (\[lq]+\[rq]) and OR (\[lq],\[rq]).
+.RS
+.RE
+.TP
+.B \f[B]os-name\f[]
+OS name filter
+.RS
+.RE
+.TP
+.B \f[B]os-family\f[]
+OS Family filter
+.RS
+.RE
+.TP
+.B \f[B]os-arch\f[]
+OS Arch filter
+.RS
+.RE
+.TP
+.B \f[B]os-version\f[]
+OS Version filter
+.RS
+.RE
+.RE
+.PP
+Example:
+.PP
+\f[CR]
+      nodefilters:
+      \ \ dispatch:
+      \ \ \ \ threadcount:\ 1
+      \ \ \ \ keepgoing:\ false
+      \ \ \ \ excludePrecedence:\ true
+      \ \ include:
+      \ \ \ \ tags:\ web
+      \ \ \ \ name:\ web-.*
+      \ \ exclude:
+      \ \ \ \ os-family:\ windows
+\f[]
+.SS Notification
+.PP
+Defines result notification for the job.
+You can include one or both of \f[B]onsuccess\f[] or
+\f[B]onfailure\f[] notifications.
+.TP
+.B \f[B]onsuccess\f[]/\f[B]onfailure\f[]
+A Map containing:
+.RS
+.TP
+.B \f[B]recipients\f[]
+A comma-separated list of Email addresses
+.RS
+.RE
+.RE
+.PP
+Example:
+.PP
+\f[CR]
+      notification:
+      \ \ onfailure:
+      \ \ \ \ recipients:\ tom\@example.com,shirley\@example.com
+      \ \ onsuccess:
+      \ \ \ \ recipients:\ bob\@example.com
+\f[]
+.SH SEE ALSO
+.PP
+\f[B]rd-jobs\f[] (1).
+.PP
+<http://yaml.org/>
+.PP
+The RunDeck source code and all documentation may be downloaded
+from <https://github.com/dtolabs/rundeck/>.
+.SH AUTHORS
+Greg Schueler.
+
