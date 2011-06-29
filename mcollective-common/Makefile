@@ -11,6 +11,7 @@ MAINTAINER=	freebsd-ports@brownbagcode.com
 
 NO_BUILD=	1
 USE_RUBY=	1
+USE_RUBY_FEATURES=	iconv
 STRIP=
 
 CONFIG_PATH=	/etc/mcollective/client.cfg
